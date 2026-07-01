@@ -17,6 +17,7 @@ import { QuestionCard } from '../components/game/QuestionCard';
 import { ProgressTimer } from '../components/game/ProgressTimer';
 import { ScoreHUD } from '../components/game/ScoreHUD';
 import { GameResultModal } from '../components/game/GameResultModal';
+import { TopScores } from '../components/game/TopScores';
 import { Button } from '../components/ui/Button';
 import './MathGamePage.css';
 
@@ -150,6 +151,7 @@ export function MathGamePage() {
           <Button variant="primary" onClick={handleStart}>
             Iniciar partida
           </Button>
+          <TopScores subjectId="math" unit="pts" />
         </div>
       )}
 

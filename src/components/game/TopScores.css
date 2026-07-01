@@ -1,0 +1,62 @@
+.top-scores {
+  width: 100%;
+  max-width: 360px;
+  margin-top: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.top-scores__title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.top-scores__empty {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.top-scores__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.top-scores__row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.top-scores__row--me {
+  border-color: var(--color-math);
+  background: var(--color-math-bg);
+}
+
+.top-scores__medal {
+  font-size: 18px;
+}
+
+.top-scores__name {
+  flex: 1;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.top-scores__score {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--color-math);
+}

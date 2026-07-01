@@ -10,6 +10,7 @@ import { recordGameResult, getUserStats } from '../services/scoreService';
 import { QuestionCard } from '../components/game/QuestionCard';
 import { ProgressTimer } from '../components/game/ProgressTimer';
 import { GameResultModal } from '../components/game/GameResultModal';
+import { TopScores } from '../components/game/TopScores';
 import { Button } from '../components/ui/Button';
 import './TabuadaCompletaPage.css';
 
@@ -114,6 +115,7 @@ export function TabuadaCompletaPage() {
           <Button variant="primary" onClick={handleStart}>
             Iniciar desafio
           </Button>
+          <TopScores subjectId="math_completa" unit="acertos" />
         </div>
       )}
 
