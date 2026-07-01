@@ -5,7 +5,7 @@ import { SUBJECTS } from '../constants/subjects';
 const MAX_HISTORY_ENTRIES = 20;
 
 function emptySubjectStats() {
-  return { bestScore: 0, gamesPlayed: 0, history: [] };
+  return { bestScore: 0, bestScoreAt: null, gamesPlayed: 0, history: [] };
 }
 
 function emptyUser(name) {
@@ -52,7 +52,11 @@ export function recordGameResult(userName, subjectId, result) {
   subject.history = [entry, ...subject.history].slice(0, MAX_HISTORY_ENTRIES);
   subject.gamesPlayed += 1;
   // Only the best (maximum) score per game is kept for the ranking — never a sum.
-  subject.bestScore = Math.max(subject.bestScore, result.score);
+  // Record when that best was achieved (>= also stamps the first game and ties).
+  if (result.score >= subject.bestScore || subject.bestScoreAt === null) {
+    subject.bestScore = result.score;
+    subject.bestScoreAt = entry.playedAt;
+  }
 
   writeScores(data);
 
@@ -75,6 +79,7 @@ export function getGlobalRanking(subjectId) {
       name: user.name,
       score: user.subjects[subjectId]?.bestScore ?? 0,
       gamesPlayed: user.subjects[subjectId]?.gamesPlayed ?? 0,
+      achievedAt: user.subjects[subjectId]?.bestScoreAt ?? null,
     }))
     .filter((entry) => entry.gamesPlayed > 0)
     .sort((a, b) => b.score - a.score);

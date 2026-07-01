@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { formatNumber } from '../../utils/formatters';
+import { formatNumber, formatDate } from '../../utils/formatters';
 import './RankingTable.css';
 
 export function RankingTable({ entries, currentUserName }) {
@@ -18,7 +18,12 @@ export function RankingTable({ entries, currentUserName }) {
           transition={{ delay: index * 0.03 }}
         >
           <span className="ranking-table__position">{index + 1}º</span>
-          <span className="ranking-table__name">{entry.name}</span>
+          <div className="ranking-table__player">
+            <span className="ranking-table__name">{entry.name}</span>
+            {entry.achievedAt && (
+              <span className="ranking-table__date">{formatDate(entry.achievedAt)}</span>
+            )}
+          </div>
           <span className="ranking-table__score">{formatNumber(entry.score)} pts</span>
         </motion.li>
       ))}

@@ -48,11 +48,23 @@
   font-size: 18px;
 }
 
-.top-scores__name {
+.top-scores__player {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
   text-align: left;
+  min-width: 0;
+}
+
+.top-scores__name {
   font-weight: 600;
   font-size: 14px;
+}
+
+.top-scores__date {
+  font-size: 11px;
+  color: var(--color-text-secondary);
 }
 
 .top-scores__score {

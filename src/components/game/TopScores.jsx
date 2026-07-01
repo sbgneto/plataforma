@@ -1,6 +1,6 @@
 import { getGlobalRanking } from '../../services/scoreService';
 import { useUser } from '../../hooks/useUser';
-import { formatNumber } from '../../utils/formatters';
+import { formatNumber, formatDate } from '../../utils/formatters';
 import './TopScores.css';
 
 const MEDALS = ['🥇', '🥈', '🥉'];
@@ -24,7 +24,12 @@ export function TopScores({ subjectId, unit = 'pts' }) {
               className={`top-scores__row ${entry.name === userName ? 'top-scores__row--me' : ''}`}
             >
               <span className="top-scores__medal">{MEDALS[index]}</span>
-              <span className="top-scores__name">{entry.name}</span>
+              <div className="top-scores__player">
+                <span className="top-scores__name">{entry.name}</span>
+                {entry.achievedAt && (
+                  <span className="top-scores__date">{formatDate(entry.achievedAt)}</span>
+                )}
+              </div>
               <span className="top-scores__score">
                 {formatNumber(entry.score)} {unit}
               </span>
