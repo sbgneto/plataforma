@@ -1,0 +1,37 @@
+.name-input {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+.name-input__label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.name-input__field {
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.name-input__field:focus {
+  border-color: var(--color-math);
+}
+
+.name-input__counter {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}

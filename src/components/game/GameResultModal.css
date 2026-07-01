@@ -1,0 +1,72 @@
+.result-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3);
+  z-index: 50;
+}
+
+.result-modal {
+  background: var(--color-surface);
+  border-radius: var(--radius-xl);
+  padding: var(--space-5);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lift);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.result-modal__title {
+  font-size: 22px;
+}
+
+.result-modal__score {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--color-math);
+  font-family: var(--font-heading);
+  line-height: 1;
+  margin-top: var(--space-2);
+}
+
+.result-modal__subtitle {
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  margin-bottom: var(--space-3);
+}
+
+.result-modal__stats {
+  display: flex;
+  gap: var(--space-5);
+  margin-bottom: var(--space-4);
+}
+
+.result-modal__stats div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.result-modal__stat-value {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.result-modal__stat-label {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.result-modal__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}

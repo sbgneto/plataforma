@@ -1,0 +1,12 @@
+.progress-timer {
+  width: 100%;
+  height: 8px;
+  background: var(--color-border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-timer__bar {
+  height: 100%;
+  border-radius: 999px;
+}

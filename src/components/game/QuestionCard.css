@@ -1,0 +1,33 @@
+.question-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.question-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.question-card__prompt {
+  font-size: 48px;
+  color: var(--color-math);
+}
+
+.question-card__options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+  width: 100%;
+  max-width: 420px;
+}
+
+@media (max-width: 480px) {
+  .question-card__prompt {
+    font-size: 36px;
+  }
+}

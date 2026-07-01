@@ -1,0 +1,51 @@
+export const SUBJECTS = [
+  {
+    id: 'math',
+    label: 'Matemática',
+    description: '',
+    route: '/matematica',
+    color: 'var(--color-math)',
+    colorBg: 'var(--color-math-bg)',
+    icon: '✕',
+    enabled: true,
+  },
+  {
+    id: 'portuguese',
+    label: 'Português',
+    description: 'Em breve',
+    route: '/portugues',
+    color: 'var(--color-portuguese)',
+    colorBg: 'var(--color-portuguese-bg)',
+    icon: 'A',
+    enabled: false,
+  },
+  {
+    id: 'history',
+    label: 'História',
+    description: 'Em breve',
+    route: '/historia',
+    color: 'var(--color-history)',
+    colorBg: 'var(--color-history-bg)',
+    icon: '⌛',
+    enabled: false,
+  },
+  {
+    id: 'science',
+    label: 'Ciências',
+    description: 'Em breve',
+    route: '/ciencias',
+    color: 'var(--color-science)',
+    colorBg: 'var(--color-science-bg)',
+    icon: '⚛',
+    enabled: false,
+  },
+];
+
+export const RANKING_SUBJECT = {
+  id: 'ranking',
+  label: 'Ranking',
+  route: '/ranking',
+  color: 'var(--color-ranking)',
+  colorBg: 'var(--color-ranking-bg)',
+  icon: '🏆',
+};

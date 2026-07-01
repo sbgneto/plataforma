@@ -1,0 +1,39 @@
+:root {
+  --color-bg: #faf9f7;
+  --color-surface: #ffffff;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #6b7280;
+  --color-border: #e5e7eb;
+
+  --color-math: #4f46e5;
+  --color-math-bg: #eef2ff;
+  --color-portuguese: #db2777;
+  --color-portuguese-bg: #fdf2f8;
+  --color-history: #d97706;
+  --color-history-bg: #fffbeb;
+  --color-science: #059669;
+  --color-science-bg: #ecfdf5;
+  --color-ranking: #7c3aed;
+  --color-ranking-bg: #f5f3ff;
+
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+
+  --font-heading: 'Poppins', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+
+  --shadow-soft: 0 4px 20px rgba(15, 23, 42, 0.06);
+  --shadow-lift: 0 12px 32px rgba(15, 23, 42, 0.12);
+}
