@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { getGlobalRanking } from '../../services/scoreService';
 import { useUser } from '../../hooks/useUser';
 import { formatNumber, formatDate } from '../../utils/formatters';
@@ -7,14 +8,34 @@ const MEDALS = ['🥇', '🥈', '🥉'];
 
 export function TopScores({ subjectId, unit = 'pts' }) {
   const { userName } = useUser();
-  // Read fresh each render — the idle screen is not performance-sensitive and this
-  // avoids showing a stale board after the ranking changes.
-  const top = getGlobalRanking(subjectId).slice(0, 3);
+  const [top, setTop] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    getGlobalRanking(subjectId)
+      .then((data) => {
+        if (!active) return;
+        setTop(data.slice(0, 3));
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!active) return;
+        setTop([]);
+        setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [subjectId]);
 
   return (
     <div className="top-scores">
       <h2 className="top-scores__title">Pontuações a bater</h2>
-      {top.length === 0 ? (
+      {loading ? (
+        <p className="top-scores__empty">Carregando…</p>
+      ) : top.length === 0 ? (
         <p className="top-scores__empty">Ninguém pontuou ainda. Seja o primeiro!</p>
       ) : (
         <ol className="top-scores__list">

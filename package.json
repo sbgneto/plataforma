@@ -11,6 +11,7 @@
     "deploy": "node scripts/deploy.mjs"
   },
   "dependencies": {
+    "firebase": "^12.15.0",
     "framer-motion": "^12.42.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

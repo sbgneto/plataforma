@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useUser } from '../hooks/useUser';
 import { getGlobalRanking, getUserStats } from '../services/scoreService';
 import { RankingTable } from '../components/ranking/RankingTable';
@@ -13,14 +13,52 @@ const TABS = MATH_GAMES.map((game) => ({ id: game.id, label: game.label }));
 export function RankingPage() {
   const { userName, hasUser } = useUser();
   const [activeTab, setActiveTab] = useState(TABS[0].id);
+  const [entries, setEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [userStats, setUserStats] = useState(null);
 
-  const entries = useMemo(() => getGlobalRanking(activeTab), [activeTab]);
-  const userStats = useMemo(() => (hasUser ? getUserStats(userName) : null), [hasUser, userName]);
+  useEffect(() => {
+    let active = true;
+    setLoading(true);
+    setError(false);
+    getGlobalRanking(activeTab)
+      .then((data) => {
+        if (!active) return;
+        setEntries(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!active) return;
+        setEntries([]);
+        setError(true);
+        setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (!hasUser) {
+      setUserStats(null);
+      return undefined;
+    }
+    let active = true;
+    getUserStats(userName)
+      .then((stats) => {
+        if (active) setUserStats(stats);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [hasUser, userName]);
 
   return (
     <div className="ranking-page">
       <h1 className="ranking-page__title">Ranking</h1>
-      <p className="ranking-page__subtitle">Pontuações salvas neste navegador</p>
+      <p className="ranking-page__subtitle">Placar compartilhado</p>
 
       {hasUser && userStats && (
         <UserStatsCard userName={userName} stats={userStats} games={MATH_GAMES} />
@@ -39,7 +77,13 @@ export function RankingPage() {
         ))}
       </div>
 
-      <RankingTable entries={entries} currentUserName={userName} />
+      {loading ? (
+        <p className="ranking-page__status">Carregando ranking…</p>
+      ) : error ? (
+        <p className="ranking-page__status">Não foi possível carregar o ranking. Verifique sua conexão.</p>
+      ) : (
+        <RankingTable entries={entries} currentUserName={userName} />
+      )}
     </div>
   );
 }

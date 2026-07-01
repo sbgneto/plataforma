@@ -6,7 +6,7 @@ import { useSound } from '../hooks/useSound';
 import { useGameTimer } from '../hooks/useGameTimer';
 import { generateAllQuestions } from '../games/math/mathQuestionGenerator';
 import { TOTAL_QUESTIONS, TOTAL_TIME_MS } from '../games/math/tabuadaCompletaConfig';
-import { recordGameResult, getUserStats } from '../services/scoreService';
+import { recordGameResult } from '../services/scoreService';
 import { QuestionCard } from '../components/game/QuestionCard';
 import { ProgressTimer } from '../components/game/ProgressTimer';
 import { GameResultModal } from '../components/game/GameResultModal';
@@ -29,30 +29,34 @@ export function TabuadaCompletaPage() {
   const [isNewBest, setIsNewBest] = useState(false);
 
   const startTimeRef = useRef(null);
-  const previousBestRef = useRef(0);
   const finishedRef = useRef(false);
 
   useEffect(() => {
     if (!hasUser) navigate('/');
   }, [hasUser, navigate]);
 
-  function finishGame(finalCorrect, finalAnswered) {
+  async function finishGame(finalCorrect, finalAnswered) {
     if (finishedRef.current) return;
     finishedRef.current = true;
     stop();
 
     const durationMs = Date.now() - startTimeRef.current;
-    recordGameResult(userName, GAME_ID, {
-      score: finalCorrect,
-      correctAnswers: finalCorrect,
-      totalQuestions: TOTAL_QUESTIONS,
-      maxCombo: 0,
-      durationMs,
-    });
-
-    setIsNewBest(finalCorrect > previousBestRef.current);
     setResult({ score: finalCorrect, correctAnswers: finalCorrect, answered: finalAnswered, durationMs });
     setGameState('finished');
+
+    try {
+      const { isNewBest: newBest } = await recordGameResult(userName, GAME_ID, {
+        score: finalCorrect,
+        correctAnswers: finalCorrect,
+        totalQuestions: TOTAL_QUESTIONS,
+        maxCombo: 0,
+        durationMs,
+      });
+      setIsNewBest(newBest);
+    } catch {
+      // Sem internet / erro ao salvar: mostra o resultado mesmo assim.
+      setIsNewBest(false);
+    }
   }
 
   // The timer callback closes over the latest state because useGameTimer keeps a
@@ -66,8 +70,6 @@ export function TabuadaCompletaPage() {
   const currentQuestion = questions[currentIndex];
 
   function handleStart() {
-    const stats = getUserStats(userName);
-    previousBestRef.current = stats?.subjects?.[GAME_ID]?.bestScore ?? 0;
     finishedRef.current = false;
 
     setQuestions(generateAllQuestions());

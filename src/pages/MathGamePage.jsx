@@ -12,7 +12,7 @@ import {
   calculatePoints,
   normalizeScore,
 } from '../games/math/mathGameConfig';
-import { recordGameResult, getUserStats } from '../services/scoreService';
+import { recordGameResult } from '../services/scoreService';
 import { QuestionCard } from '../components/game/QuestionCard';
 import { ProgressTimer } from '../components/game/ProgressTimer';
 import { ScoreHUD } from '../components/game/ScoreHUD';
@@ -39,7 +39,6 @@ export function MathGamePage() {
   const [isNewBest, setIsNewBest] = useState(false);
 
   const startTimeRef = useRef(null);
-  const previousBestRef = useRef(0);
 
   useEffect(() => {
     if (!hasUser) navigate('/');
@@ -61,9 +60,6 @@ export function MathGamePage() {
   }, [gameState, currentIndex]);
 
   function handleStart() {
-    const stats = getUserStats(userName);
-    previousBestRef.current = stats?.subjects?.math?.bestScore ?? 0;
-
     setQuestions(generateQuestions(QUESTIONS_PER_GAME));
     setCurrentIndex(0);
     setScore(0);
@@ -121,7 +117,7 @@ export function MathGamePage() {
     setCurrentIndex((i) => i + 1);
   }
 
-  function finishGame(finalStats) {
+  async function finishGame(finalStats) {
     const durationMs = Date.now() - startTimeRef.current;
     const finalResult = {
       score: normalizeScore(finalStats.score),
@@ -130,10 +126,15 @@ export function MathGamePage() {
       maxCombo: finalStats.maxCombo,
       durationMs,
     };
-    recordGameResult(userName, 'math', finalResult);
-    setIsNewBest(finalResult.score > previousBestRef.current);
     setResult(finalResult);
     setGameState('finished');
+    try {
+      const { isNewBest: newBest } = await recordGameResult(userName, 'math', finalResult);
+      setIsNewBest(newBest);
+    } catch {
+      // Sem internet / erro ao salvar: mostra o resultado mesmo assim.
+      setIsNewBest(false);
+    }
   }
 
   if (!hasUser) return null;
