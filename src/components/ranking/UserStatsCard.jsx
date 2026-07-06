@@ -14,6 +14,14 @@ export function UserStatsCard({ userName, stats, games }) {
             <div key={game.id} className="user-stats-card__game">
               <span className="user-stats-card__game-value">
                 {formatNumber(gameStats?.bestScore ?? 0)}
+                {gameStats?.bestScoreComplete === false && (
+                  <span
+                    className="user-stats-card__game-partial"
+                    title="Melhor pontuação com seleção parcial de tabuadas"
+                  >
+                    parcial
+                  </span>
+                )}
               </span>
               <span className="user-stats-card__game-label">{game.label}</span>
             </div>

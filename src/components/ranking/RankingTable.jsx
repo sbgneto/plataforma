@@ -19,12 +19,23 @@ export function RankingTable({ entries, currentUserName }) {
         >
           <span className="ranking-table__position">{index + 1}º</span>
           <div className="ranking-table__player">
-            <span className="ranking-table__name">{entry.name}</span>
+            <span className="ranking-table__name">
+              {entry.name}
+              {entry.complete === false && (
+                <span className="ranking-table__partial" title="Partida com seleção parcial de tabuadas">
+                  Parcial{entry.tables?.length ? ` · ${entry.tables.join(', ')}` : ''}
+                </span>
+              )}
+            </span>
             {entry.achievedAt && (
               <span className="ranking-table__date">{formatDate(entry.achievedAt)}</span>
             )}
           </div>
-          <span className="ranking-table__score">{formatNumber(entry.score)} pts</span>
+          <span
+            className={`ranking-table__score ${entry.complete === false ? 'ranking-table__score--partial' : ''}`}
+          >
+            {formatNumber(entry.score)} pts
+          </span>
         </motion.li>
       ))}
     </ol>

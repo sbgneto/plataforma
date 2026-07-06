@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../hooks/useUser';
 import { useSound } from '../hooks/useSound';
 import { useGameTimer } from '../hooks/useGameTimer';
-import { generateQuestions } from '../games/math/mathQuestionGenerator';
+import { generateQuestions, TABLE_NUMBERS } from '../games/math/mathQuestionGenerator';
 import {
   QUESTIONS_PER_GAME,
   TIME_PER_QUESTION_MS,
@@ -14,6 +14,7 @@ import {
 } from '../games/math/mathGameConfig';
 import { recordGameResult } from '../services/scoreService';
 import { QuestionCard } from '../components/game/QuestionCard';
+import { NumberPicker } from '../components/game/NumberPicker';
 import { ProgressTimer } from '../components/game/ProgressTimer';
 import { ScoreHUD } from '../components/game/ScoreHUD';
 import { GameResultModal } from '../components/game/GameResultModal';
@@ -27,6 +28,7 @@ export function MathGamePage() {
   const sound = useSound();
 
   const [gameState, setGameState] = useState('idle');
+  const [selectedNumbers, setSelectedNumbers] = useState(TABLE_NUMBERS);
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [score, setScore] = useState(0);
@@ -60,7 +62,7 @@ export function MathGamePage() {
   }, [gameState, currentIndex]);
 
   function handleStart() {
-    setQuestions(generateQuestions(QUESTIONS_PER_GAME));
+    setQuestions(generateQuestions(QUESTIONS_PER_GAME, selectedNumbers));
     setCurrentIndex(0);
     setScore(0);
     setCombo(0);
@@ -119,12 +121,15 @@ export function MathGamePage() {
 
   async function finishGame(finalStats) {
     const durationMs = Date.now() - startTimeRef.current;
+    const complete = selectedNumbers.length === TABLE_NUMBERS.length;
     const finalResult = {
       score: normalizeScore(finalStats.score),
       correctAnswers: finalStats.correctCount,
       totalQuestions: questions.length,
       maxCombo: finalStats.maxCombo,
       durationMs,
+      complete,
+      tables: complete ? null : selectedNumbers,
     };
     setResult(finalResult);
     setGameState('finished');
@@ -149,6 +154,11 @@ export function MathGamePage() {
             {QUESTIONS_PER_GAME} perguntas, {TIME_PER_QUESTION_MS / 1000}s cada. Responda rápido
             e encadeie acertos para ganhar bônus de combo!
           </p>
+          <NumberPicker
+            numbers={TABLE_NUMBERS}
+            selected={selectedNumbers}
+            onChange={setSelectedNumbers}
+          />
           <Button variant="primary" onClick={handleStart}>
             Iniciar partida
           </Button>

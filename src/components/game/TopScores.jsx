@@ -46,7 +46,14 @@ export function TopScores({ subjectId, unit = 'pts' }) {
             >
               <span className="top-scores__medal">{MEDALS[index]}</span>
               <div className="top-scores__player">
-                <span className="top-scores__name">{entry.name}</span>
+                <span className="top-scores__name">
+                  {entry.name}
+                  {entry.complete === false && (
+                    <span className="top-scores__partial" title="Partida com seleção parcial de tabuadas">
+                      Parcial{entry.tables?.length ? ` · ${entry.tables.join(', ')}` : ''}
+                    </span>
+                  )}
+                </span>
                 {entry.achievedAt && (
                   <span className="top-scores__date">{formatDate(entry.achievedAt)}</span>
                 )}
