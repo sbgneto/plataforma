@@ -21,4 +21,14 @@ export const MATH_GAMES = [
     icon: '⚡',
     enabled: true,
   },
+  {
+    id: 'math_soma_subtracao',
+    label: 'Soma e Subtração',
+    description: '10 perguntas · pontos por velocidade e combo',
+    route: '/matematica/soma-subtracao',
+    color: 'var(--color-math)',
+    colorBg: 'var(--color-math-bg)',
+    icon: '±',
+    enabled: true,
+  },
 ];

@@ -5,6 +5,7 @@ import { HomePage } from '../pages/HomePage';
 import { MathMenuPage } from '../pages/MathMenuPage';
 import { MathGamePage } from '../pages/MathGamePage';
 import { TabuadaCompletaPage } from '../pages/TabuadaCompletaPage';
+import { SomaSubtracaoPage } from '../pages/SomaSubtracaoPage';
 import { RankingPage } from '../pages/RankingPage';
 
 export function AppRouter() {
@@ -42,6 +43,14 @@ export function AppRouter() {
           element={
             <PageTransition>
               <TabuadaCompletaPage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/matematica/soma-subtracao"
+          element={
+            <PageTransition>
+              <SomaSubtracaoPage />
             </PageTransition>
           }
         />

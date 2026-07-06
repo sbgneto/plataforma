@@ -1,0 +1,45 @@
+.soma-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  max-width: 640px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.soma-page__idle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  text-align: center;
+}
+
+.soma-page__eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-math);
+}
+
+.soma-page__title {
+  font-size: 34px;
+}
+
+.soma-page__description {
+  color: var(--color-text-secondary);
+  max-width: 420px;
+  margin-bottom: var(--space-2);
+}
+
+.soma-page__playing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+}
