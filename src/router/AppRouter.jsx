@@ -4,6 +4,7 @@ import { PageTransition } from '../components/layout/PageTransition';
 import { HomePage } from '../pages/HomePage';
 import { MathMenuPage } from '../pages/MathMenuPage';
 import { MathGamePage } from '../pages/MathGamePage';
+import { AddSubGamePage } from '../pages/AddSubGamePage';
 import { TabuadaCompletaPage } from '../pages/TabuadaCompletaPage';
 import { RankingPage } from '../pages/RankingPage';
 
@@ -34,6 +35,14 @@ export function AppRouter() {
           element={
             <PageTransition>
               <MathGamePage />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/matematica/soma-subtracao"
+          element={
+            <PageTransition>
+              <AddSubGamePage />
             </PageTransition>
           }
         />

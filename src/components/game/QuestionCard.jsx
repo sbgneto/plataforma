@@ -13,7 +13,7 @@ export function QuestionCard({ question, selectedOption, answeredState, onAnswer
   const content = (
     <>
       <h2 className="question-card__prompt">
-        {question.a} × {question.b} = ?
+        {question.a} {question.operator ?? '×'} {question.b} = ?
       </h2>
 
       <div className="question-card__options">

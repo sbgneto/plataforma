@@ -12,6 +12,16 @@ export const MATH_GAMES = [
     enabled: true,
   },
   {
+    id: 'math_soma_sub',
+    label: 'Soma e Subtração',
+    description: '10 perguntas · pontos por velocidade e combo',
+    route: '/matematica/soma-subtracao',
+    color: 'var(--color-math)',
+    colorBg: 'var(--color-math-bg)',
+    icon: '±',
+    enabled: true,
+  },
+  {
     id: 'math_completa',
     label: 'Tabuada Completa',
     description: '100 perguntas em 100 segundos',
