@@ -12,8 +12,12 @@ import { db } from './firebase';
 import { MATH_GAMES } from '../constants/mathGames';
 
 // Ranking compartilhado no Firestore. Estrutura:
-//   games/{subjectId}/scores/{docId}  ->  { name, bestScore, bestScoreAt, gamesPlayed, updatedAt }
+//   games/{subjectId}/scores/{docId}  ->  { name, bestScore, bestScoreAt,
+//     bestScoreComplete, bestScoreTables, gamesPlayed, updatedAt }
 // Guarda só a MELHOR (máxima) pontuação de cada usuário por jogo — nunca a soma.
+// bestScoreComplete/bestScoreTables dizem se a melhor partida usou todas as
+// tabuadas ou só uma seleção parcial (docs antigos, sem o campo, contam como
+// completos).
 
 const RANKING_LIMIT = 50;
 
@@ -27,7 +31,7 @@ function safeDocId(name) {
 }
 
 function emptySubjectStats() {
-  return { bestScore: 0, bestScoreAt: null, gamesPlayed: 0 };
+  return { bestScore: 0, bestScoreAt: null, bestScoreComplete: true, gamesPlayed: 0 };
 }
 
 export async function recordGameResult(userName, subjectId, result) {
@@ -43,6 +47,10 @@ export async function recordGameResult(userName, subjectId, result) {
     name: userName,
     bestScore: isNewBest ? result.score : prev.bestScore,
     bestScoreAt: isNewBest ? now : (prev?.bestScoreAt ?? now),
+    // Marca se a melhor partida usou todas as tabuadas (jogos sem seleção de
+    // tabuada gravam sempre "completa").
+    bestScoreComplete: isNewBest ? result.complete !== false : (prev?.bestScoreComplete ?? true),
+    bestScoreTables: isNewBest ? (result.tables ?? null) : (prev?.bestScoreTables ?? null),
     gamesPlayed: (prev?.gamesPlayed ?? 0) + 1,
     updatedAt: now,
   };
@@ -64,6 +72,7 @@ export async function getUserStats(userName) {
         ? {
             bestScore: snap.data().bestScore ?? 0,
             bestScoreAt: snap.data().bestScoreAt ?? null,
+            bestScoreComplete: snap.data().bestScoreComplete ?? true,
             gamesPlayed: snap.data().gamesPlayed ?? 0,
           }
         : emptySubjectStats();
@@ -86,6 +95,8 @@ export async function getGlobalRanking(subjectId) {
       score: data.bestScore ?? 0,
       gamesPlayed: data.gamesPlayed ?? 0,
       achievedAt: data.bestScoreAt ?? null,
+      complete: data.bestScoreComplete ?? true,
+      tables: data.bestScoreTables ?? null,
     };
   });
 }

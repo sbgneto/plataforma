@@ -1,0 +1,73 @@
+.number-picker {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.number-picker__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.number-picker__grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.number-picker__chip {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-secondary);
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.number-picker__chip:hover {
+  border-color: var(--color-math);
+}
+
+.number-picker__chip:active {
+  transform: scale(0.94);
+}
+
+.number-picker__chip--on {
+  background: var(--color-math);
+  border-color: var(--color-math);
+  color: #fff;
+}
+
+.number-picker__all {
+  height: 44px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--color-math);
+  background: var(--color-math-bg);
+  color: var(--color-math);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.number-picker__all:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.number-picker__hint {
+  font-size: 12px;
+  color: var(--color-history);
+  max-width: 360px;
+  text-align: center;
+}

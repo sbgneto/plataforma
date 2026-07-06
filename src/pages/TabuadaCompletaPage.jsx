@@ -4,10 +4,11 @@ import { motion } from 'framer-motion';
 import { useUser } from '../hooks/useUser';
 import { useSound } from '../hooks/useSound';
 import { useGameTimer } from '../hooks/useGameTimer';
-import { generateAllQuestions } from '../games/math/mathQuestionGenerator';
-import { TOTAL_QUESTIONS, TOTAL_TIME_MS } from '../games/math/tabuadaCompletaConfig';
+import { generateAllQuestions, TABLE_NUMBERS } from '../games/math/mathQuestionGenerator';
+import { QUESTIONS_PER_NUMBER, TIME_PER_QUESTION_MS } from '../games/math/tabuadaCompletaConfig';
 import { recordGameResult } from '../services/scoreService';
 import { QuestionCard } from '../components/game/QuestionCard';
+import { NumberPicker } from '../components/game/NumberPicker';
 import { ProgressTimer } from '../components/game/ProgressTimer';
 import { GameResultModal } from '../components/game/GameResultModal';
 import { TopScores } from '../components/game/TopScores';
@@ -22,6 +23,7 @@ export function TabuadaCompletaPage() {
   const sound = useSound();
 
   const [gameState, setGameState] = useState('idle');
+  const [selectedNumbers, setSelectedNumbers] = useState(TABLE_NUMBERS);
   const [questions, setQuestions] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [correctCount, setCorrectCount] = useState(0);
@@ -35,22 +37,36 @@ export function TabuadaCompletaPage() {
     if (!hasUser) navigate('/');
   }, [hasUser, navigate]);
 
+  // Uma pergunta por segundo: o tamanho e o tempo da partida acompanham a
+  // quantidade de tabuadas escolhidas.
+  const totalQuestions = selectedNumbers.length * QUESTIONS_PER_NUMBER;
+  const totalTimeMs = totalQuestions * TIME_PER_QUESTION_MS;
+
   async function finishGame(finalCorrect, finalAnswered) {
     if (finishedRef.current) return;
     finishedRef.current = true;
     stop();
 
     const durationMs = Date.now() - startTimeRef.current;
-    setResult({ score: finalCorrect, correctAnswers: finalCorrect, answered: finalAnswered, durationMs });
+    const complete = selectedNumbers.length === TABLE_NUMBERS.length;
+    setResult({
+      score: finalCorrect,
+      correctAnswers: finalCorrect,
+      answered: finalAnswered,
+      total: questions.length,
+      durationMs,
+    });
     setGameState('finished');
 
     try {
       const { isNewBest: newBest } = await recordGameResult(userName, GAME_ID, {
         score: finalCorrect,
         correctAnswers: finalCorrect,
-        totalQuestions: TOTAL_QUESTIONS,
+        totalQuestions: questions.length,
         maxCombo: 0,
         durationMs,
+        complete,
+        tables: complete ? null : selectedNumbers,
       });
       setIsNewBest(newBest);
     } catch {
@@ -65,14 +81,14 @@ export function TabuadaCompletaPage() {
     finishGame(correctCount, currentIndex);
   }
 
-  const { timeLeftMs, start, stop } = useGameTimer(TOTAL_TIME_MS, handleTimeout);
+  const { timeLeftMs, start, stop } = useGameTimer(totalTimeMs, handleTimeout);
 
   const currentQuestion = questions[currentIndex];
 
   function handleStart() {
     finishedRef.current = false;
 
-    setQuestions(generateAllQuestions());
+    setQuestions(generateAllQuestions(selectedNumbers));
     setCurrentIndex(0);
     setCorrectCount(0);
     setResult(null);
@@ -93,7 +109,7 @@ export function TabuadaCompletaPage() {
     else sound.playWrong();
     setCorrectCount(newCorrect);
 
-    if (newAnswered >= TOTAL_QUESTIONS) {
+    if (newAnswered >= questions.length) {
       finishGame(newCorrect, newAnswered);
       return;
     }
@@ -111,9 +127,14 @@ export function TabuadaCompletaPage() {
           <span className="completa-page__eyebrow">Matemática</span>
           <h1 className="completa-page__title">Tabuada Completa</h1>
           <p className="completa-page__description">
-            Responda as {TOTAL_QUESTIONS} multiplicações da tabuada (0 a 9), uma de cada vez.
-            Você tem {TOTAL_TIME_MS / 1000} segundos no total — sua nota é o número de acertos!
+            Responda as {totalQuestions} multiplicações das tabuadas escolhidas, uma de cada vez.
+            Você tem {totalTimeMs / 1000} segundos no total — sua nota é o número de acertos!
           </p>
+          <NumberPicker
+            numbers={TABLE_NUMBERS}
+            selected={selectedNumbers}
+            onChange={setSelectedNumbers}
+          />
           <Button variant="primary" onClick={handleStart}>
             Iniciar desafio
           </Button>
@@ -123,7 +144,7 @@ export function TabuadaCompletaPage() {
 
       {gameState === 'playing' && currentQuestion && (
         <div className="completa-page__playing">
-          <ProgressTimer timeLeftMs={timeLeftMs} durationMs={TOTAL_TIME_MS} />
+          <ProgressTimer timeLeftMs={timeLeftMs} durationMs={totalTimeMs} />
 
           <div className="completa-hud">
             <div className="completa-hud__item">
@@ -149,7 +170,7 @@ export function TabuadaCompletaPage() {
             <div className="completa-hud__item">
               <span className="completa-hud__label">Questão</span>
               <span className="completa-hud__value">
-                {currentIndex + 1}/{TOTAL_QUESTIONS}
+                {currentIndex + 1}/{questions.length}
               </span>
             </div>
           </div>
@@ -169,7 +190,7 @@ export function TabuadaCompletaPage() {
           score={result.score}
           scoreUnit="acertos"
           stats={[
-            { value: `${result.answered}/${TOTAL_QUESTIONS}`, label: 'Respondidas' },
+            { value: `${result.answered}/${result.total}`, label: 'Respondidas' },
             { value: `${result.answered - result.correctAnswers}`, label: 'Erros' },
           ]}
           isNewBest={isNewBest}

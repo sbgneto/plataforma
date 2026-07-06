@@ -60,6 +60,22 @@
 .top-scores__name {
   font-weight: 600;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+/* Melhor pontuação obtida com seleção parcial de tabuadas. */
+.top-scores__partial {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-history);
+  background: var(--color-history-bg);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0 6px;
+  white-space: nowrap;
 }
 
 .top-scores__date {

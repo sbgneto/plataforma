@@ -7,9 +7,14 @@ function shuffle(array) {
   return result;
 }
 
-function allCombos() {
+// Números disponíveis para treino de tabuada (0 a 9).
+export const TABLE_NUMBERS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+// Combinações das tabuadas escolhidas: cada número selecionado multiplicado
+// por 0 a 9 (10 perguntas por tabuada; seleção completa = 100 combinações).
+function allCombos(numbers = TABLE_NUMBERS) {
   const combos = [];
-  for (let a = 0; a <= 9; a += 1) {
+  for (const a of numbers) {
     for (let b = 0; b <= 9; b += 1) {
       combos.push([a, b]);
     }
@@ -60,11 +65,12 @@ function buildQuestion([a, b], index) {
   };
 }
 
-export function generateQuestions(count = 10) {
-  return shuffle(allCombos()).slice(0, count).map(buildQuestion);
+export function generateQuestions(count = 10, numbers = TABLE_NUMBERS) {
+  return shuffle(allCombos(numbers)).slice(0, count).map(buildQuestion);
 }
 
-// Every combination 0-9 × 0-9 (100 questions) in random order, one per question.
-export function generateAllQuestions() {
-  return shuffle(allCombos()).map(buildQuestion);
+// Todas as combinações das tabuadas escolhidas em ordem aleatória, uma por
+// pergunta (seleção completa = 100 perguntas).
+export function generateAllQuestions(numbers = TABLE_NUMBERS) {
+  return shuffle(allCombos(numbers)).map(buildQuestion);
 }

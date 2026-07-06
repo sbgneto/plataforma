@@ -38,6 +38,22 @@
   font-weight: 700;
   font-size: 22px;
   color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+/* Melhor pontuação obtida com seleção parcial de tabuadas. */
+.user-stats-card__game-partial {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-history);
+  background: var(--color-history-bg);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0 6px;
 }
 
 .user-stats-card__game-label {
